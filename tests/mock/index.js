@@ -60,7 +60,7 @@ const mockedNewData = [
   },
   {
     id: '617c9937-f1bb-45c8-a382-bebd2d67321e',
-    name: 'Leshaun',
+    name: 'Reshaun',
     email: 'Leshaun4325@gmail.com',
     favorite_flavor: 'raspberry'
   },
@@ -113,3 +113,5 @@ const mockedNewData = [
     favorite_flavor: 'blueberry'
   }
 ]
+
+module.exports = { mockedOldData, mockedNewData }

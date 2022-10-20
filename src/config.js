@@ -19,4 +19,9 @@ const newCred = {
 const oldPool = new Pool(oldCred);
 const newPool = new Pool(newCred);
 
-module.exports = { oldPool, newPool }
+const closePools = async () => {
+  await oldPool.end();
+  await newPool.end();
+}
+
+module.exports = { oldPool, newPool, closePools }

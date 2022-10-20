@@ -1,1 +1,0 @@
-const { sortFunc, findDifferencesBetweenArray, compareData, generateReport } = require('../src/utils')

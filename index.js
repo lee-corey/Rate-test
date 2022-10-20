@@ -1,5 +1,5 @@
 const { getTableName, getColumns, getData } = require('./src/model');
-const { oldPool, newPool } = require('./src/config');
+const { oldPool, newPool, closePools } = require('./src/config');
 const { generateReport } = require('./src/utils');
 
 (async () => {
@@ -14,6 +14,7 @@ const { generateReport } = require('./src/utils');
 
     let oldData = await getData(oldPool, table);
     const newData = await getData(newPool, table);
-    generateReport(oldData, newData, 'row', primaryKey)
+    generateReport(oldData, newData, 'row', primaryKey);
   })
+  await closePools();
 })();
