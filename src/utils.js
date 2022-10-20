@@ -51,32 +51,31 @@ const compareData = (oldData, newData, primaryKey) => {
   }
 }
 
-const generateReport = (oldData, newData, type, primaryKey) => {
-  let report = '';
+const generateReport = (oldData, newData, type, primaryKey, report) => {
   if (type === 'column') {
     let diffArr = findDifferencesBetweenArray(newData, oldData)
 
     if (diffArr.length) {
-      report = `New table has ${diffArr.join(' ')} ${type} that old table doesn't has.`
-      console.log(report)
+      report += `New table has ${diffArr.join(' ')} ${type} that old table doesn't has.\n\n`
     }
 
     diffArr = findDifferencesBetweenArray(oldData, newData)
 
     if (diffArr.length) {
-      report = `Old table has ${diffArr.join(' ')} ${type} that new table doesn't has.`
-      console.log(report)
+      report += `Old table has ${diffArr.join(' ')} ${type} that new table doesn't has.\n\n`
     }
   } else if(type === 'row') {
     const {sameKeyArr, existInOldArr, existInNewArr} = compareData(oldData, newData, primaryKey)
 
-    console.log('Here are primary keys corrupted during migration.')
-    console.log(sameKeyArr.join(', '));
-    console.log('Here are missing keys.')
-    console.log(existInOldArr.join(', '));
-    console.log('Here are newly added keys.')
-    console.log(existInNewArr.join(', '));
+    report += 'Here are primary keys corrupted during migration.\n'
+    report += sameKeyArr.join('\n');
+    report += '\n\nHere are missing keys.\n'
+    report += existInOldArr.join('\n');
+    report += '\n\nHere are newly added keys.\n'
+    report += existInNewArr.join('\n');
   }
+
+  return report;
 }
 
 module.exports = { sortFunc, findDifferencesBetweenArray, compareData, generateReport }

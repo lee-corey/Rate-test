@@ -5,13 +5,16 @@
   "main": "index.js",
   "jest": {
     "verbose": true,
-    "modulePaths": ["<rootDir>"] 
+    "modulePaths": [
+      "<rootDir>"
+    ]
   },
   "scripts": {
     "test": "jest",
     "launch": "node index.js"
   },
   "dependencies": {
+    "fs": "^0.0.1-security",
     "jest": "^29.2.1",
     "pg": "^8.8.0"
   }
