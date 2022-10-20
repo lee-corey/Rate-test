@@ -56,26 +56,21 @@ const generateReport = (oldData, newData, type, primaryKey, report) => {
     let diffArr = findDifferencesBetweenArray(newData, oldData)
 
     if (diffArr.length) {
-      report += `New table has ${diffArr.join(' ')} ${type} that old table doesn't has.\n\n`
+      report.columnsExistInNew = diffArr;
     }
 
     diffArr = findDifferencesBetweenArray(oldData, newData)
 
     if (diffArr.length) {
-      report += `Old table has ${diffArr.join(' ')} ${type} that new table doesn't has.\n\n`
+      report.columnsExistInOld = diffArr;
     }
   } else if(type === 'row') {
     const {sameKeyArr, existInOldArr, existInNewArr} = compareData(oldData, newData, primaryKey)
 
-    report += 'Here are primary keys corrupted during migration.\n'
-    report += sameKeyArr.join('\n');
-    report += '\n\nHere are missing keys.\n'
-    report += existInOldArr.join('\n');
-    report += '\n\nHere are newly added keys.\n'
-    report += existInNewArr.join('\n');
+    report.corruptedKeys = sameKeyArr;
+    report.missingKeys = existInOldArr;
+    report.addedKeys = existInNewArr;
   }
-
-  return report;
 }
 
 module.exports = { sortFunc, findDifferencesBetweenArray, compareData, generateReport }
