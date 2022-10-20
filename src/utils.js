@@ -11,6 +11,46 @@ const findDifferencesBetweenArray = (firstArr, secondArr) => {
   return firstArr.filter(each => !secondArr.includes(each));
 }
 
+const compareData = (oldData, newData, primaryKey) => {
+  oldData.sort((a, b) => sortFunc(a,b, primaryKey))
+  newData.sort((a, b) => sortFunc(a,b, primaryKey))
+
+  const sameKeyArr = [], existInOldArr = [], existInNewArr = [];
+  let i=0, j=0;
+  // finding has same key but different data
+  while (i < oldData.length || j < newData.length) {
+    if (i === oldData.length) {
+      existInNewArr.push(j);
+      j++;
+    } else if (j === newData.length) {
+      existInOldArr,push(i);
+      i++;
+    } else if (oldData[i][primaryKey] === newData[j][primaryKey]) {
+      Object.keys(oldData[i]).forEach(key => {
+        let flag = false;
+        if (key !== primaryKey && oldData[i][key] !== newData[j][key]) {
+          flag = true;
+        }
+        if (flag) {
+          sameKeyArr.push(oldData[i][primaryKey]);
+        }
+      })
+      i++;
+      j++;
+    } else if(oldData[i][primaryKey] < newData[j][primaryKey]) {
+      existInOldArr.push(oldData[i][primaryKey]);
+      i++;
+    } else if(oldData[i][primaryKey] > newData[j][primaryKey]) {
+      existInNewArr.push(newData[j][primaryKey]);
+      j++;
+    }
+  }
+
+  return {
+    sameKeyArr, existInOldArr, existInNewArr
+  }
+}
+
 const generateReport = (oldData, newData, type, primaryKey) => {
   let report = '';
   if (type === 'column') {
@@ -28,40 +68,8 @@ const generateReport = (oldData, newData, type, primaryKey) => {
       console.log(report)
     }
   } else if(type === 'row') {
-    // sort data
-    oldData.sort((a, b) => sortFunc(a,b, primaryKey))
-    newData.sort((a, b) => sortFunc(a,b, primaryKey))
+    const {sameKeyArr, existInOldArr, existInNewArr} = compareData(oldData, newData, primaryKey)
 
-    const sameKeyArr = [], existInOldArr = [], existInNewArr = [];
-    let i=0, j=0;
-    // finding has same key but different data
-    while (i < oldData.length || j < newData.length) {
-      if (i === oldData.length) {
-        existInNewArr.push(j);
-        j++;
-      } else if (j === newData.length) {
-        existInOldArr,push(i);
-        i++;
-      } else if (oldData[i][primaryKey] === newData[j][primaryKey]) {
-        Object.keys(oldData[i]).forEach(key => {
-          let flag = false;
-          if (key !== primaryKey && oldData[i][key] !== newData[j][key]) {
-            flag = true;
-          }
-          if (flag) {
-            sameKeyArr.push(oldData[i][primaryKey]);
-          }
-        })
-        i++;
-        j++;
-      } else if(oldData[i][primaryKey] < newData[j][primaryKey]) {
-        existInOldArr.push(oldData[i][primaryKey]);
-        i++;
-      } else if(oldData[i][primaryKey] > newData[j][primaryKey]) {
-        existInNewArr.push(newData[j][primaryKey]);
-        j++;
-      }
-    }
     console.log('Here are primary keys corrupted during migration.')
     console.log(sameKeyArr.join(', '));
     console.log('Here are missing keys.')
@@ -71,4 +79,4 @@ const generateReport = (oldData, newData, type, primaryKey) => {
   }
 }
 
-module.exports = { sortFunc, generateReport }
+module.exports = { sortFunc, findDifferencesBetweenArray, compareData, generateReport }
