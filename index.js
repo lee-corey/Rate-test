@@ -23,7 +23,7 @@ const { generateReport } = require('./src/utils');
     })
   })
   Promise.all(promises).then(async () => {
-    fs.writeFile('./report.json', JSON.stringify(report, 2), 'utf8', function(err) {
+    fs.writeFile('./report.json', JSON.stringify(report, null, 2), 'utf8', function(err) {
       if (err) {
         console.log(err);
       }
